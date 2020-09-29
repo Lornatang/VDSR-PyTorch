@@ -136,3 +136,4 @@ outputs
 results
 weights/*.pth
 weights/*.zip
+*.mp4

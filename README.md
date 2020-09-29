@@ -162,8 +162,8 @@ optional arguments:
   -j N, --workers N     Number of data loading workers. (default:4)
   --epochs N            Number of total epochs to run. (default:100)
   --image-size IMAGE_SIZE
-                        Size of the data crop (squared assumed). (default:32)
-  -b N, --batch-size N  mini-batch size (default: 128), this is the total
+                        Size of the data crop (squared assumed). (default:256)
+  -b N, --batch-size N  mini-batch size (default: 16), this is the total
                         batch size of all GPUs on the current node when using
                         Data Parallel or Distributed Data Parallel.
   --lr LR               Learning rate. (default:0.1)

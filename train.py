@@ -34,11 +34,11 @@ parser.add_argument("-j", "--workers", default=4, type=int, metavar="N",
                     help="Number of data loading workers. (default:4)")
 parser.add_argument("--epochs", default=100, type=int, metavar="N",
                     help="Number of total epochs to run. (default:100)")
-parser.add_argument("--image-size", type=int, default=32,
-                    help="Size of the data crop (squared assumed). (default:32)")
-parser.add_argument("-b", "--batch-size", default=128, type=int,
+parser.add_argument("--image-size", type=int, default=256,
+                    help="Size of the data crop (squared assumed). (default:256)")
+parser.add_argument("-b", "--batch-size", default=16, type=int,
                     metavar="N",
-                    help="mini-batch size (default: 128), this is the total "
+                    help="mini-batch size (default: 16), this is the total "
                          "batch size of all GPUs on the current node when "
                          "using Data Parallel or Distributed Data Parallel.")
 parser.add_argument("--lr", type=float, default=0.1,
