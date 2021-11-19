@@ -50,17 +50,13 @@ def define_loss() -> nn.MSELoss:
 
 def define_optimizer(model) -> optim.SGD:
     if config.model_optimizer_name == "sgd":
-        optimizer = optim.SGD([{"params": model.features.parameters()},
-                               {"params": model.map.parameters()},
-                               {"params": model.reconstruction.parameters(), "lr": config.model_lr * 0.1}],
+        optimizer = optim.SGD(model.parameters(),
                               lr=config.model_lr,
                               momentum=config.model_momentum,
                               weight_decay=config.model_weight_decay,
                               nesterov=config.model_nesterov)
     else:
-        optimizer = optim.Adam([{"params": model.features.parameters()},
-                                {"params": model.map.parameters()},
-                                {"params": model.reconstruction.parameters(), "lr": config.model_lr * 0.1}],
+        optimizer = optim.Adam(model.parameters(),
                                lr=config.model_lr,
                                betas=config.model_betas)
 
@@ -102,7 +98,7 @@ def train(model, train_dataloader, criterion, optimizer, epoch, scaler, writer) 
         # Gradient zoom
         scaler.scale(loss).backward()
         scaler.unscale_(optimizer)
-        torch.nn.utils.clip_grad_norm(model.parameters(), config.model_clip_gradient)
+        torch.nn.utils.clip_grad_norm_(model.parameters(), config.model_clip_gradient)
         # Update generator weight
         scaler.step(optimizer)
         scaler.update()
@@ -128,7 +124,7 @@ def validate(model, valid_dataloader, criterion, epoch, writer) -> float:
             lr = lr.to(config.device, non_blocking=True)
             hr = hr.to(config.device, non_blocking=True)
             # Calculate the PSNR evaluation index.
-            sr = model(lr).clamp_(0.0, 1.0)
+            sr = model(lr)
             psnr = 10 * torch.log10(1 / criterion(sr, hr)).item()
             total_psnr += psnr
 
