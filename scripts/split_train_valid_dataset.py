@@ -41,7 +41,7 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Split train and valid dataset scripts.")
-    parser.add_argument("--inputs_dir", type=str, default="TB291", help="Path to input image directory. (Default : ``TB291``)")
+    parser.add_argument("--inputs_dir", type=str, default="TB291/VDSR", help="Path to input image directory. (Default: ``TB291/VDSR``)")
     parser.add_argument("--valid_samples_ratio", type=float, default=0.1, help="What percentage of the data is extracted from the training set into the validation set.  (Default: 0.1)")
     args = parser.parse_args()
 

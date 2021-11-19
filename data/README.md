@@ -44,10 +44,11 @@
 
 ```text
 - TB291
-    - train
-        - ...
-    - valid
-        - ...
+    - VDSR
+        - train
+            - ...
+        - valid
+            - ...
 ```
 
 ### LMDB format

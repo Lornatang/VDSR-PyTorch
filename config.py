@@ -31,8 +31,8 @@ exp_name = "exp001"
 if mode == "train":
     # Dataset
     # Image format
-    train_image_dir = f"data/TB291/train"
-    valid_image_dir = f"data/TB291/valid"
+    train_image_dir = f"data/TB291/VDSR/train"
+    valid_image_dir = f"data/TB291/VDSR/valid"
     # LMDB format
     train_lr_lmdb_path = f"data/train_lmdb/VDSR/TB291_LRbicx{upscale_factor}_lmdb"
     train_hr_lmdb_path = f"data/train_lmdb/VDSR/TB291_HR_lmdb"
@@ -41,6 +41,7 @@ if mode == "train":
 
     image_size = 41
     batch_size = 64
+    num_workers = 4
 
     # Incremental training and migration training
     resume = False
@@ -57,12 +58,13 @@ if mode == "train":
     model_momentum = 0.9
     model_weight_decay = 1e-4
     model_nesterov = False
-    model_clip_gradient = 1e-4
+    model_clip_gradient = 1e-2
 
     # Modify optimizer parameter (faster training and better PSNR)
     # model_optimizer_name = "adam"
     # model_lr = 1e-1
     # model_betas = (0.9, 0.999)
+    # model_clip_gradient = 1e-2
 
     # Optimizer scheduler parameter
     lr_scheduler_name = "StepLR"
@@ -74,7 +76,6 @@ if mode == "train":
 # ==============================================================================
 if mode == "valid":
     # Test data address
-    lr_dir = f"data/Set5/LRbicx{upscale_factor}"
     sr_dir = f"results/test/{exp_name}"
     hr_dir = f"data/Set5/GTmod12"
 
