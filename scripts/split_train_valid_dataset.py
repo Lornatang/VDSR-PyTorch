@@ -20,23 +20,32 @@ from tqdm import tqdm
 
 
 def main(args):
-    train_image_dir = f"{args.inputs_dir}/train"
-    valid_image_dir = f"{args.inputs_dir}/valid"
+    train_inputs_image_dir = f"{args.inputs_dir}/train/inputs"
+    train_target_image_dir = f"{args.inputs_dir}/train/target"
+    valid_inputs_image_dir = f"{args.inputs_dir}/valid/inputs"
+    valid_target_image_dir = f"{args.inputs_dir}/valid/target"
 
-    if not os.path.exists(train_image_dir):
-        os.makedirs(train_image_dir)
-    if not os.path.exists(valid_image_dir):
-        os.makedirs(valid_image_dir)
+    if not os.path.exists(train_inputs_image_dir):
+        os.makedirs(train_inputs_image_dir)
+    if not os.path.exists(train_target_image_dir):
+        os.makedirs(train_target_image_dir)
+    if not os.path.exists(valid_inputs_image_dir):
+        os.makedirs(valid_inputs_image_dir)
+    if not os.path.exists(valid_target_image_dir):
+        os.makedirs(valid_target_image_dir)
 
-    train_files = os.listdir(train_image_dir)
+    train_files = os.listdir(train_inputs_image_dir)
     valid_files = random.sample(train_files, int(len(train_files) * args.valid_samples_ratio))
 
     process_bar = tqdm(valid_files, total=len(valid_files))
 
     for image_file_name in process_bar:
-        train_image_path = f"{train_image_dir}/{image_file_name}"
-        valid_image_path = f"{valid_image_dir}/{image_file_name}"
-        shutil.copyfile(train_image_path, valid_image_path)
+        train_inputs_image_path = f"{train_inputs_image_dir}/{image_file_name}"
+        train_target_image_path = f"{train_target_image_dir}/{image_file_name}"
+        valid_inputs_image_path = f"{valid_inputs_image_dir}/{image_file_name}"
+        valid_target_image_path = f"{valid_target_image_dir}/{image_file_name}"
+        shutil.copyfile(train_inputs_image_path, valid_inputs_image_path)
+        shutil.copyfile(train_target_image_path, valid_target_image_path)
 
 
 if __name__ == "__main__":
