@@ -23,7 +23,7 @@ device = torch.device("cuda", 0)
 cudnn.benchmark = True
 upscale_factor = 2
 mode = "train"
-exp_name = "exp001"
+exp_name = "x2"
 
 # ==============================================================================
 # Training configuration
@@ -31,13 +31,13 @@ exp_name = "exp001"
 if mode == "train":
     # Dataset
     # Image format
-    train_image_dir = f"data/TB291/VDSR/train"
-    valid_image_dir = f"data/TB291/VDSR/valid"
+    train_image_dir = "data/TB291/VDSR/train"
+    valid_image_dir = "data/TB291/VDSR/valid"
     # LMDB format
-    train_lr_lmdb_path = f"data/train_lmdb/VDSR/TB291_LRbicx{upscale_factor}_lmdb"
-    train_hr_lmdb_path = f"data/train_lmdb/VDSR/TB291_HR_lmdb"
-    valid_lr_lmdb_path = f"data/valid_lmdb/VDSR/TB291_LRbicx{upscale_factor}_lmdb"
-    valid_hr_lmdb_path = f"data/valid_lmdb/VDSR/TB291_HR_lmdb"
+    train_lr_lmdb_path = "data/train_lmdb/VDSR/TB291_LR_lmdb"
+    train_hr_lmdb_path = "data/train_lmdb/VDSR/TB291_HR_lmdb"
+    valid_lr_lmdb_path = "data/valid_lmdb/VDSR/TB291_LR_lmdb"
+    valid_hr_lmdb_path = "data/valid_lmdb/VDSR/TB291_HR_lmdb"
 
     image_size = 41
     batch_size = 64
@@ -58,13 +58,13 @@ if mode == "train":
     model_momentum = 0.9
     model_weight_decay = 1e-4
     model_nesterov = False
-    model_clip_gradient = 1e-2
+    model_clip_gradient = 1e-4
 
     # Modify optimizer parameter (faster training and better PSNR)
     # model_optimizer_name = "adam"
     # model_lr = 1e-1
     # model_betas = (0.9, 0.999)
-    # model_clip_gradient = 1e-2
+    # model_clip_gradient = 1e-4
 
     # Optimizer scheduler parameter
     lr_scheduler_name = "StepLR"
