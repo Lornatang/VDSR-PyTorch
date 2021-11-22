@@ -19,8 +19,6 @@ import lmdb
 from PIL import Image
 from torch import Tensor
 from torch.utils.data import Dataset
-from torchvision import transforms
-from torchvision.transforms.functional import InterpolationMode as IMode
 
 import imgproc
 
@@ -32,46 +30,27 @@ class ImageDataset(Dataset):
 
     Args:
         dataroot         (str): Training data set address
-        image_size       (int): High resolution image size
-        upscale_factor   (int): Image magnification
-        mode             (str): Data set loading method, the training data set is for data enhancement,
-                             and the verification data set is not for data enhancement
 
     """
 
-    def __init__(self, dataroot: str, image_size: int, upscale_factor: int, mode: str) -> None:
+    def __init__(self, dataroot: str) -> None:
         super(ImageDataset, self).__init__()
         self.filenames = [os.path.join(dataroot, x) for x in os.listdir(dataroot)]
 
-        if mode == "train":
-            self.hr_transforms = transforms.Compose([
-                transforms.RandomCrop([image_size, image_size]),
-                transforms.RandomRotation(90),
-                transforms.RandomHorizontalFlip(),
-            ])
-        else:
-            self.hr_transforms = transforms.Compose([
-                transforms.CenterCrop([image_size, image_size]),
-                transforms.RandomRotation(90),
-                transforms.RandomHorizontalFlip(),
-            ])
-
-        self.lr_transforms = transforms.Compose([
-            transforms.Resize([image_size // upscale_factor, image_size // upscale_factor], interpolation=IMode.BICUBIC, antialias=True),
-            transforms.Resize([image_size, image_size], interpolation=IMode.BICUBIC, antialias=True)
-        ])
+        lr_dir_path = os.path.join(dataroot, "inputs")
+        hr_dir_path = os.path.join(dataroot, "target")
+        self.filenames = os.listdir(lr_dir_path)
+        self.lr_filenames = [os.path.join(lr_dir_path, x) for x in self.filenames]
+        self.hr_filenames = [os.path.join(hr_dir_path, x) for x in self.filenames]
 
     def __getitem__(self, batch_index: int) -> [Tensor, Tensor]:
         # Read a batch of image data
-        image = Image.open(self.filenames[batch_index])
-
-        # Transform image
-        hr_image_data = self.hr_transforms(image)
-        lr_image_data = self.lr_transforms(hr_image_data)
+        lr_image = Image.open(self.lr_filenames[batch_index])
+        hr_image = Image.open(self.hr_filenames[batch_index])
 
         # Only extract the image data of the Y channel
-        lr_y_image_data = lr_image_data.convert("YCbCr").split()[0]
-        hr_y_image_data = hr_image_data.convert("YCbCr").split()[0]
+        lr_y_image_data = lr_image.convert("YCbCr").split()[0]
+        hr_y_image_data = hr_image.convert("YCbCr").split()[0]
 
         # Convert image data into Tensor stream format (PyTorch).
         # Note: The range of input and output is between [0, 1]
