@@ -20,23 +20,15 @@ from tqdm import tqdm
 
 
 def main(args):
-    raw_inputs_image_dir = f"{args.output_dir}/temp/inputs"
-    raw_target_image_dir = f"{args.output_dir}/temp/target"
-    new_inputs_dir = f"{args.output_dir}/train/inputs"
-    new_target_dir = f"{args.output_dir}/train/target"
+    raw_image_dir = f"{args.output_dir}/temp"
+    new_image_dir = f"{args.output_dir}/train"
 
-    if os.path.exists(raw_inputs_image_dir):
-        shutil.rmtree(raw_inputs_image_dir)
-    if os.path.exists(raw_target_image_dir):
-        shutil.rmtree(raw_target_image_dir)
-    if os.path.exists(new_inputs_dir):
-        shutil.rmtree(new_inputs_dir)
-    if os.path.exists(new_target_dir):
-        shutil.rmtree(new_target_dir)
-    os.makedirs(raw_inputs_image_dir)
-    os.makedirs(raw_target_image_dir)
-    os.makedirs(new_inputs_dir)
-    os.makedirs(new_target_dir)
+    if os.path.exists(raw_image_dir):
+        shutil.rmtree(raw_image_dir)
+    if os.path.exists(new_image_dir):
+        shutil.rmtree(new_image_dir)
+    os.makedirs(raw_image_dir)
+    os.makedirs(new_image_dir)
 
     # Carry out data enhancement processing on the data set in the temp catalog in turn
     file_names = os.listdir(args.inputs_dir)
@@ -44,44 +36,29 @@ def main(args):
         raw_image = Image.open(f"{args.inputs_dir}/{file_name}")
 
         index = 0
-        for scale_ratio in [1.0, 0.8, 0.6]:
-            for rotate_angle in [0, 90, 180]:
-                for flip_prob in [0.0, 1.0]:
-                    for scale_factor in [2, 3, 4]:
-                        # Process HR image
-                        hr_image = raw_image.resize((int(raw_image.width * scale_ratio), int(raw_image.height * scale_ratio)), Image.BICUBIC)
-                        hr_image = hr_image.rotate(rotate_angle, expand=True)
-                        hr_image = hr_image.transpose(Image.FLIP_LEFT_RIGHT) if flip_prob > 0.5 else hr_image
-
-                        # Process LR image
-                        lr_image = hr_image.resize([hr_image.width // scale_factor, hr_image.height // scale_factor], Image.BICUBIC)
-                        lr_image = lr_image.resize([hr_image.width, hr_image.height], Image.BICUBIC)
-
-                        lr_image.save(f"{raw_inputs_image_dir}/{file_name.split('.')[-2]}_{index:04d}.{file_name.split('.')[-1]}")
-                        hr_image.save(f"{raw_target_image_dir}/{file_name.split('.')[-2]}_{index:04d}.{file_name.split('.')[-1]}")
-                        index += 1
-
+        for scale_ratio in [1.0, 0.9, 0.7, 0.8, 0.6]:
+            for rotate_angle in [0, 90, 180, 270]:
+                for flip_ratio in [0.0, 1.0]:
+                    # Process HR image
+                    image = raw_image.resize((int(raw_image.width * scale_ratio), int(raw_image.height * scale_ratio)), Image.BICUBIC)
+                    image = image.rotate(rotate_angle, expand=True)
+                    image = image.transpose(Image.FLIP_LEFT_RIGHT) if flip_ratio > 0.5 else image
+                    image.save(f"{raw_image_dir}/{file_name.split('.')[-2]}_{index:04d}.{file_name.split('.')[-1]}")
+                    index += 1
     print("Data augment successful.")
-
-    file_names = os.listdir(raw_inputs_image_dir)
+    
+    file_names = os.listdir(raw_image_dir)
     for file_name in tqdm(file_names, total=len(file_names)):
-        lr_image = Image.open(f"{raw_inputs_image_dir}/{file_name}")
-        hr_image = Image.open(f"{raw_target_image_dir}/{file_name}")
+        image = Image.open(f"{raw_image_dir}/{file_name}")
 
-        for pos_x in range(0, lr_image.size[0] - args.image_size + 1, args.step):
-            for pos_y in range(0, lr_image.size[1] - args.image_size + 1, args.step):
+        for pos_x in range(0, image.size[0] - args.image_size + 1, args.step):
+            for pos_y in range(0, image.size[1] - args.image_size + 1, args.step):
                 # crop box xywh
-                crop_lr_image = lr_image.crop([pos_x, pos_y, pos_x + args.image_size, pos_y + args.image_size])
-                crop_hr_image = hr_image.crop([pos_x, pos_y, pos_x + args.image_size, pos_y + args.image_size])
-
+                crop_image = image.crop([pos_x, pos_y, pos_x + args.image_size, pos_y + args.image_size])
                 # Save all images
-                crop_lr_image.save(f"{new_inputs_dir}/{file_name.split('.')[-2]}_{pos_x}_{pos_y}.{file_name.split('.')[-1]}")
-                crop_hr_image.save(f"{new_target_dir}/{file_name.split('.')[-2]}_{pos_x}_{pos_y}.{file_name.split('.')[-1]}")
-
+                crop_image.save(f"{new_image_dir}/{file_name.split('.')[-2]}_{pos_x}_{pos_y}.{file_name.split('.')[-1]}")
     print("Data split successful.")
-
-    shutil.rmtree(raw_inputs_image_dir)
-    shutil.rmtree(raw_target_image_dir)
+    shutil.rmtree(raw_image_dir)
 
 
 if __name__ == "__main__":
