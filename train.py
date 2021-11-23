@@ -28,10 +28,18 @@ from model import VDSR
 
 
 def load_dataset() -> [DataLoader, DataLoader]:
-    train_datasets = ImageDataset(config.train_image_dir, config.image_size, config.upscale_factor, "train")
-    valid_datasets = ImageDataset(config.train_image_dir, config.image_size, config.upscale_factor, "valid")
-    train_dataloader = DataLoader(train_datasets, batch_size=config.batch_size, shuffle=True, num_workers=config.num_workers, pin_memory=True)
-    valid_dataloader = DataLoader(valid_datasets, batch_size=config.batch_size, shuffle=False, num_workers=config.num_workers, pin_memory=True)
+    train_datasets = ImageDataset(config.train_image_dir)
+    valid_datasets = ImageDataset(config.valid_image_dir)
+    train_dataloader = DataLoader(train_datasets,
+                                  batch_size=config.batch_size,
+                                  shuffle=True,
+                                  num_workers=config.num_workers,
+                                  pin_memory=True)
+    valid_dataloader = DataLoader(valid_datasets,
+                                  batch_size=config.batch_size,
+                                  shuffle=False,
+                                  num_workers=config.num_workers,
+                                  pin_memory=True)
 
     return train_dataloader, valid_dataloader
 
@@ -43,12 +51,12 @@ def build_model() -> nn.Module:
 
 
 def define_loss() -> nn.MSELoss:
-    criterion = nn.MSELoss().to(config.device)
+    criterion = nn.MSELoss(reduction="sum").to(config.device)
 
     return criterion
 
 
-def define_optimizer(model) -> optim.SGD:
+def define_optimizer(model) -> optim:
     if config.model_optimizer_name == "sgd":
         optimizer = optim.SGD(model.parameters(),
                               lr=config.model_lr,
@@ -98,7 +106,7 @@ def train(model, train_dataloader, criterion, optimizer, epoch, scaler, writer) 
         # Gradient zoom
         scaler.scale(loss).backward()
         scaler.unscale_(optimizer)
-        torch.nn.utils.clip_grad_norm_(model.parameters(), config.model_clip_gradient)
+        torch.nn.utils.clip_grad_norm_(model.parameters(), config.model_clip_gradient, norm_type=2.0)
         # Update generator weight
         scaler.step(optimizer)
         scaler.update()
@@ -111,7 +119,7 @@ def train(model, train_dataloader, criterion, optimizer, epoch, scaler, writer) 
             print(f"Epoch[{epoch + 1:05d}/{config.epochs:05d}]({index + 1:05d}/{batches:05d}) MSE loss: {loss.item():.6f}.")
 
 
-def validate(model, valid_dataloader, criterion, epoch, writer) -> float:
+def validate(model, valid_dataloader, epoch, writer) -> float:
     # Calculate how many iterations there are under Epoch.
     batches = len(valid_dataloader)
     # Put the generator in verification mode.
@@ -124,8 +132,8 @@ def validate(model, valid_dataloader, criterion, epoch, writer) -> float:
             lr = lr.to(config.device, non_blocking=True)
             hr = hr.to(config.device, non_blocking=True)
             # Calculate the PSNR evaluation index.
-            sr = model(lr)
-            psnr = 10 * torch.log10(1 / criterion(sr, hr)).item()
+            sr = model(lr).clamp_(0.0, 1.0)
+            psnr = 10. * torch.log10(1. / torch.mean((sr - lr) ** 2))
             total_psnr += psnr
 
         avg_psnr = total_psnr / batches
@@ -185,7 +193,7 @@ def main():
         # Update lr
         scheduler.step()
 
-        psnr = validate(model, valid_dataloader, criterion, epoch, writer)
+        psnr = validate(model, valid_dataloader, epoch, writer)
         # Automatically save the model with the highest index
         is_best = psnr > best_psnr
         best_psnr = max(psnr, best_psnr)
