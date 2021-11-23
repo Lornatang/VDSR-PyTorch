@@ -21,7 +21,7 @@ from natsort import natsorted
 
 import config
 import imgproc
-from model import SRCNN
+from model import VDSR
 
 
 def main() -> None:
@@ -32,7 +32,7 @@ def main() -> None:
 
     # Initialize the super-resolution model
     print("Build SR model...")
-    model = SRCNN().to(config.device, non_blocking=True)
+    model = VDSR().to(config.device, non_blocking=True)
     print("Build SR model successfully.")
 
     # Load the super-resolution model weights
@@ -86,7 +86,7 @@ def main() -> None:
 
         # Only reconstruct the Y channel image data.
         with torch.no_grad():
-            sr_y_tensor = model(lr_y_tensor)
+            sr_y_tensor = model(lr_y_tensor).clamp(0.0, 1.0)
 
         # Cal PSNR
         total_psnr += 10. * torch.log10(1. / torch.mean((sr_y_tensor - hr_y_tensor) ** 2))
