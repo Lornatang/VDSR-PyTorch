@@ -21,7 +21,7 @@ from torch import nn
 class ConvReLU(nn.Module):
     def __init__(self, channels: int) -> None:
         super(ConvReLU, self).__init__()
-        self.conv = nn.Conv2d(channels, channels, (3, 3), (1, 1), (1, 1))
+        self.conv = nn.Conv2d(channels, channels, (3, 3), (1, 1), (1, 1), bias=False)
         self.relu = nn.ReLU(True)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -36,7 +36,7 @@ class VDSR(nn.Module):
         super(VDSR, self).__init__()
         # Input layer
         self.conv1 = nn.Sequential(
-            nn.Conv2d(1, 64, (3, 3), (1, 1), (1, 1)),
+            nn.Conv2d(1, 64, (3, 3), (1, 1), (1, 1), bias=False),
             nn.ReLU(True)
         )
 
@@ -47,7 +47,7 @@ class VDSR(nn.Module):
         self.trunk = nn.Sequential(*trunk)
 
         # Output layer
-        self.conv2 = nn.Conv2d(64, 1, (3, 3), (1, 1), (1, 1))
+        self.conv2 = nn.Conv2d(64, 1, (3, 3), (1, 1), (1, 1), bias=False)
 
         # Initialize model weights
         self._initialize_weights()
@@ -70,4 +70,3 @@ class VDSR(nn.Module):
         for module in self.modules():
             if isinstance(module, nn.Conv2d):
                 module.weight.data.normal_(0.0, sqrt(2 / (module.kernel_size[0] * module.kernel_size[1] * module.out_channels)))
-                nn.init.zeros_(module.bias.data)
