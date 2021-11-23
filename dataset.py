@@ -27,10 +27,8 @@ __all__ = ["ImageDataset", "LMDBDataset"]
 
 class ImageDataset(Dataset):
     """Customize the data set loading function and prepare low/high resolution image data in advance.
-
     Args:
         dataroot         (str): Training data set address
-
     """
 
     def __init__(self, dataroot: str) -> None:
@@ -49,15 +47,15 @@ class ImageDataset(Dataset):
         hr_image = Image.open(self.hr_filenames[batch_index])
 
         # Only extract the image data of the Y channel
-        lr_y_image_data = lr_image.convert("YCbCr").split()[0]
-        hr_y_image_data = hr_image.convert("YCbCr").split()[0]
+        lr_y_image = lr_image.convert("YCbCr").split()[0]
+        hr_y_image = hr_image.convert("YCbCr").split()[0]
 
         # Convert image data into Tensor stream format (PyTorch).
         # Note: The range of input and output is between [0, 1]
-        lr_tensor_data = imgproc.image2tensor(lr_y_image_data, range_norm=False, half=False)
-        hr_tensor_data = imgproc.image2tensor(hr_y_image_data, range_norm=False, half=False)
+        lr_tensor = imgproc.image2tensor(lr_y_image, range_norm=False, half=False)
+        hr_tensor = imgproc.image2tensor(hr_y_image, range_norm=False, half=False)
 
-        return lr_tensor_data, hr_tensor_data
+        return lr_tensor, hr_tensor
 
     def __len__(self) -> int:
         return len(self.filenames)
@@ -65,11 +63,9 @@ class ImageDataset(Dataset):
 
 class LMDBDataset(Dataset):
     """Load the data set as a data set in the form of LMDB.
-
     Attributes:
         lr_datasets (list): Low-resolution image data in the dataset
         hr_datasets (list): High-resolution image data in the dataset
-
     """
 
     def __init__(self, lr_lmdb_path, hr_lmdb_path) -> None:
@@ -91,15 +87,15 @@ class LMDBDataset(Dataset):
         hr_image = self.hr_datasets[batch_index]
 
         # Only extract the image data of the Y channel
-        lr_y_image_data = lr_image.convert("YCbCr").split()[0]
-        hr_y_image_data = hr_image.convert("YCbCr").split()[0]
+        lr_y_image = lr_image.convert("YCbCr").split()[0]
+        hr_y_image = hr_image.convert("YCbCr").split()[0]
 
         # Convert image data into Tensor stream format (PyTorch).
         # Note: The range of input and output is between [0, 1]
-        lr_tensor_data = imgproc.image2tensor(lr_y_image_data, range_norm=False, half=False)
-        hr_tensor_data = imgproc.image2tensor(hr_y_image_data, range_norm=False, half=False)
+        lr_tensor = imgproc.image2tensor(lr_y_image, range_norm=False, half=False)
+        hr_tensor = imgproc.image2tensor(hr_y_image, range_norm=False, half=False)
 
-        return lr_tensor_data, hr_tensor_data
+        return lr_tensor, hr_tensor
 
     def __len__(self) -> int:
         return len(self.hr_datasets)
