@@ -7,12 +7,8 @@ os.system("python ./prepare_dataset.py")
 os.system("python ./split_train_valid_dataset.py")
 
 # Create LMDB database file
-os.system("python ./create_lmdb_dataset.py --image_dir TB291/VDSR/train --lmdb_path train_lmdb/VDSR/TB291_HR_lmdb --upscale_factor 1")
-os.system("python ./create_lmdb_dataset.py --image_dir TB291/VDSR/train --lmdb_path train_lmdb/VDSR/TB291_LRbicx2_lmdb --upscale_factor 2")
-os.system("python ./create_lmdb_dataset.py --image_dir TB291/VDSR/train --lmdb_path train_lmdb/VDSR/TB291_LRbicx3_lmdb --upscale_factor 3")
-os.system("python ./create_lmdb_dataset.py --image_dir TB291/VDSR/train --lmdb_path train_lmdb/VDSR/TB291_LRbicx4_lmdb --upscale_factor 4")
+os.system("python ./create_lmdb_dataset.py --image_dir TB291/VDSR/train/inputs --lmdb_path train_lmdb/VDSR/TB291_LR_lmdb")
+os.system("python ./create_lmdb_dataset.py --image_dir TB291/VDSR/train/target --lmdb_path train_lmdb/VDSR/TB291_LR_lmdb")
 
-os.system("python ./create_lmdb_dataset.py --image_dir TB291/VDSR/valid --lmdb_path valid_lmdb/VDSR/TB291_HR_lmdb --upscale_factor 1")
-os.system("python ./create_lmdb_dataset.py --image_dir TB291/VDSR/valid --lmdb_path valid_lmdb/VDSR/TB291_LRbicx2_lmdb --upscale_factor 2")
-os.system("python ./create_lmdb_dataset.py --image_dir TB291/VDSR/valid --lmdb_path valid_lmdb/VDSR/TB291_LRbicx3_lmdb --upscale_factor 3")
-os.system("python ./create_lmdb_dataset.py --image_dir TB291/VDSR/valid --lmdb_path valid_lmdb/VDSR/TB291_LRbicx4_lmdb --upscale_factor 4")
+os.system("python ./create_lmdb_dataset.py --image_dir TB291/VDSR/valid/inputs --lmdb_path valid_lmdb/VDSR/TB291_LR_lmdb")
+os.system("python ./create_lmdb_dataset.py --image_dir TB291/VDSR/valid/target --lmdb_path valid_lmdb/VDSR/TB291_HR_lmdb")
