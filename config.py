@@ -49,7 +49,7 @@ if mode == "train":
     start_epoch = 0
     resume_weight = ""
 
-    # Total num epochs.
+    # Total num epochs
     epochs = 80
 
     # Model optimizer parameter (less training and low PSNR)
@@ -58,13 +58,13 @@ if mode == "train":
     model_momentum = 0.9
     model_weight_decay = 1e-4
     model_nesterov = False
-    model_clip_gradient = 0.4
+    model_clip_gradient = 1.0
 
     # Modify optimizer parameter (faster training and better PSNR)
     # model_optimizer_name = "adam"
-    # model_lr = 1e-3
+    # model_lr = 1e-2
     # model_betas = (0.9, 0.999)
-    # model_clip_gradient = 0.4
+    # model_clip_gradient = 1.0
 
     # Optimizer scheduler parameter
     lr_scheduler_name = "StepLR"
