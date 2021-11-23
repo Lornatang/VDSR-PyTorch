@@ -49,6 +49,10 @@ def main(args):
         image = cv2.imread(f"{args.image_dir}/{file_name}")
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
+        # Process HR to LR image
+        image = cv2.resize(image, [image.shape[0] // args.upscale_factor, image.shape[1] // args.upscale_factor], interpolation=cv2.INTER_CUBIC)
+        image = cv2.resize(image, [image.shape[0], image.shape[1]], interpolation=cv2.INTER_CUBIC)
+
         # Label from int to ascii
         image_key_bytes = str(total_sub_image_number).encode("ascii")
 
@@ -71,8 +75,9 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Create LMDB database scripts.")
-    parser.add_argument("--image_dir", type=str, default="TB291/VDSR/train/target", help="Path to image directory. (Default: ``TB291/VDSR/train/target``)")
+    parser.add_argument("--image_dir", type=str, default="TB291/VDSR/train", help="Path to image directory. (Default: ``TB291/VDSR/train``)")
     parser.add_argument("--lmdb_path", type=str, default="train_lmdb/VDSR/TB291_HR_lmdb", help="Path to lmdb database. (Default: ``train_lmdb/VDSR/TB291_HR_lmdb``)")
+    parser.add_argument("--upscale_factor", type=int, default=1, help="Image zoom factor. (Default: 1)")
     args = parser.parse_args()
 
     main(args)
