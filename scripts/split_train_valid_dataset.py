@@ -19,7 +19,7 @@ import shutil
 from tqdm import tqdm
 
 
-def main(args):
+def main():
     train_inputs_image_dir = f"{args.inputs_dir}/train/inputs"
     train_target_image_dir = f"{args.inputs_dir}/train/target"
     valid_inputs_image_dir = f"{args.inputs_dir}/valid/inputs"
@@ -54,4 +54,4 @@ if __name__ == "__main__":
     parser.add_argument("--valid_samples_ratio", type=float, default=0.1, help="What percentage of the data is extracted from the training set into the validation set.  (Default: 0.1)")
     args = parser.parse_args()
 
-    main(args)
+    main()
