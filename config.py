@@ -58,7 +58,7 @@ if mode == "train":
     model_momentum = 0.9
     model_weight_decay = 1e-4
     model_nesterov = False
-    model_clip_gradient = 0.4
+    model_clip_gradient = 1.0
 
     # Adam optimizer parameter (faster training and better PSNR)
     # model_optimizer_name = "adam"
