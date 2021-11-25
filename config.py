@@ -23,7 +23,7 @@ device = torch.device("cuda", 0)
 cudnn.benchmark = True
 upscale_factor = 2
 mode = "train"
-exp_name = "exp001"
+exp_name = "baseline"
 
 # ==============================================================================
 # Training configuration
@@ -52,15 +52,15 @@ if mode == "train":
     # Total num epochs
     epochs = 80
 
-    # Model optimizer parameter (less training and low PSNR)
+    # SGD optimizer parameter (less training and low PSNR)
     model_optimizer_name = "sgd"
     model_lr = 1e-1
     model_momentum = 0.9
     model_weight_decay = 1e-4
     model_nesterov = False
-    model_clip_gradient = 1.0
+    model_clip_gradient = 0.4
 
-    # Modify optimizer parameter (faster training and better PSNR)
+    # Adam optimizer parameter (faster training and better PSNR)
     # model_optimizer_name = "adam"
     # model_lr = 1e-2
     # model_betas = (0.9, 0.999)
@@ -70,6 +70,8 @@ if mode == "train":
     lr_scheduler_name = "StepLR"
     lr_scheduler_step_size = 20
     lr_scheduler_gamma = 0.1
+
+    print_frequency = 100
 
 # ==============================================================================
 # Verify configuration
