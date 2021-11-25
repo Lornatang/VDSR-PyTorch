@@ -44,17 +44,21 @@ def main():
         raw_image = Image.open(f"{args.inputs_dir}/{file_name}")
 
         index = 0
-        for scale_ratio in [1.0, 0.9, 0.8, 0.7, 0.6]:
-            for scale_factor in [2, 3, 4]:
-                # Process HR image
-                hr_image = raw_image.resize((int(raw_image.width * scale_ratio), int(raw_image.height * scale_ratio)), Image.BICUBIC)
-                # Process LR image
-                lr_image = hr_image.resize([hr_image.width // scale_factor, hr_image.height // scale_factor], Image.BICUBIC)
-                lr_image = lr_image.resize([hr_image.width, hr_image.height], Image.BICUBIC)
-                # Save all images
-                lr_image.save(f"{raw_inputs_image_dir}/{file_name.split('.')[-2]}_{index:04d}.{file_name.split('.')[-1]}")
-                hr_image.save(f"{raw_target_image_dir}/{file_name.split('.')[-2]}_{index:04d}.{file_name.split('.')[-1]}")
-                index += 1
+        for scale_ratio in [1.0, 0.9, 0.7, 0.5]:
+            for rotate_angle in [0, 90, 180]:
+                for flip_prob in [0.0, 1.0]:
+                    for scale_factor in [2, 3, 4]:
+                        # Process HR image
+                        hr_image = raw_image.resize((int(raw_image.width * scale_ratio), int(raw_image.height * scale_ratio)), Image.BICUBIC) if scale_ratio != 1.0 else raw_image
+                        hr_image = hr_image.rotate(rotate_angle) if rotate_angle != 0 else hr_image
+                        hr_image = hr_image.transpose(Image.FLIP_LEFT_RIGHT) if flip_prob != 0.0 else hr_image
+                        # Process LR image
+                        lr_image = hr_image.resize([hr_image.width // scale_factor, hr_image.height // scale_factor], Image.BICUBIC)
+                        lr_image = lr_image.resize([hr_image.width, hr_image.height], Image.BICUBIC)
+                        # Save all images
+                        lr_image.save(f"{raw_inputs_image_dir}/{file_name.split('.')[-2]}_{index:04d}.{file_name.split('.')[-1]}")
+                        hr_image.save(f"{raw_target_image_dir}/{file_name.split('.')[-2]}_{index:04d}.{file_name.split('.')[-1]}")
+                        index += 1
     print("Data augment successful.")
 
     file_names = os.listdir(raw_inputs_image_dir)
