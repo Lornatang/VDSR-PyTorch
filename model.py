@@ -37,7 +37,7 @@ class VDSR(nn.Module):
         # Input layer
         self.conv1 = nn.Sequential(
             nn.Conv2d(1, 64, (3, 3), (1, 1), (1, 1), bias=False),
-            nn.ReLU(True)
+            nn.ReLU(True),
         )
 
         # Features trunk blocks
