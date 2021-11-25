@@ -20,7 +20,7 @@ import lmdb
 from tqdm import tqdm
 
 
-def main(args):
+def main():
     if os.path.exists(args.lmdb_path):
         shutil.rmtree(args.lmdb_path)
     os.makedirs(args.lmdb_path)
@@ -73,4 +73,4 @@ if __name__ == "__main__":
     parser.add_argument("--lmdb_path", type=str, default="train_lmdb/VDSR/TB291_HR_lmdb", help="Path to lmdb database. (Default: ``train_lmdb/VDSR/TB291_HR_lmdb``)")
     args = parser.parse_args()
 
-    main(args)
+    main()
