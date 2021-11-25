@@ -19,7 +19,7 @@ from PIL import Image
 from tqdm import tqdm
 
 
-def main(args):
+def main():
     raw_inputs_image_dir = f"{args.output_dir}/temp/inputs"
     raw_target_image_dir = f"{args.output_dir}/temp/target"
     new_inputs_dir = f"{args.output_dir}/train/inputs"
@@ -84,4 +84,4 @@ if __name__ == "__main__":
     parser.add_argument("--step", type=int, default=41, help="Crop image similar to sliding window.  (Default: 41)")
     args = parser.parse_args()
 
-    main(args)
+    main()
