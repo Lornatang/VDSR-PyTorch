@@ -46,9 +46,11 @@
 - TB291
     - VDSR
         - train
-            - ...
+            - inputs
+            - target
         - valid
-            - ...
+            - inputs
+            - target
 ```
 
 ### LMDB format
