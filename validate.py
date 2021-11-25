@@ -68,36 +68,30 @@ def main() -> None:
         lr_image = hr_image.resize([hr_image.width // config.upscale_factor, hr_image.height // config.upscale_factor], Image.BICUBIC)
         lr_image = lr_image.resize([hr_image.width, hr_image.height], Image.BICUBIC)
 
-        # Extract Y channel lr image data.
+        # Extract Y channel lr image data
         lr_image = np.array(lr_image).astype(np.float32)
-        lr_ycbcr = imgproc.convert_rgb_to_ycbcr(lr_image)
-        lr_y_image = lr_ycbcr[..., 0]
-        lr_y_image /= 255.
-        lr_y_tensor = torch.from_numpy(lr_y_image).to(config.device).unsqueeze(0).unsqueeze(0)
-        lr_y_tensor = lr_y_tensor.half()
+        lr_ycbcr_image = imgproc.convert_rgb_to_ycbcr(lr_image)
+        lr_y_tensor = imgproc.image2tensor(lr_ycbcr_image, range_norm=False, half=True).unsqueeze_(0)
 
         # Extract Y channel hr image data.
         hr_image = np.array(hr_image).astype(np.float32)
-        hr_ycbcr = imgproc.convert_rgb_to_ycbcr(hr_image)
-        hr_y_image = hr_ycbcr[..., 0]
-        hr_y_image /= 255.
-        hr_y_tensor = torch.from_numpy(hr_y_image).to(config.device).unsqueeze(0).unsqueeze(0)
-        hr_y_tensor = hr_y_tensor.half()
+        hr_ycbcr_image = imgproc.convert_rgb_to_ycbcr(hr_image)
+        hr_y_tensor = imgproc.image2tensor(hr_ycbcr_image, range_norm=False, half=True).unsqueeze_(0)
 
         # Only reconstruct the Y channel image data.
         with torch.no_grad():
-            sr_y_tensor = model(lr_y_tensor).clamp(0.0, 1.0)
+            sr_y_tensor = model(lr_y_tensor)
 
         # Cal PSNR
         total_psnr += 10. * torch.log10(1. / torch.mean((sr_y_tensor - hr_y_tensor) ** 2))
 
-        sr_y_image = sr_y_tensor.mul_(255.0).cpu().squeeze_(0).squeeze_(0).numpy()
-        sr_image = np.array([sr_y_image, lr_ycbcr[..., 1], lr_ycbcr[..., 2]]).transpose([1, 2, 0])
+        sr_y_image = imgproc.tensor2image(sr_y_tensor, range_norm=False, half=True)
+        sr_image = np.array([sr_y_image, lr_ycbcr_image[..., 1], lr_ycbcr_image[..., 2]]).transpose([1, 2, 0])
         sr_image = np.clip(imgproc.convert_ycbcr_to_rgb(sr_image), 0.0, 255.0).astype(np.uint8)
         sr_image = Image.fromarray(sr_image)
         sr_image.save(sr_image_path)
 
-    print(f"PSNR: {total_psnr / total_files:.2f}.\n")
+    print(f"PSNR: {total_psnr / total_files:4.2f}dB.\n")
 
 
 if __name__ == "__main__":
