@@ -1,219 +1,131 @@
 # VDSR-PyTorch
 
 ### Overview
-This repository contains an op-for-op PyTorch reimplementation of 
-[Accurate Image Super-Resolution Using Very Deep Convolutional Networks](https://arxiv.org/abs/1511.04587).
+
+This repository contains an op-for-op PyTorch reimplementation of [Accurate Image Super-Resolution Using Very Deep Convolutional Networks](https://arxiv.org/abs/1511.04587).
 
 ### Table of contents
-1. [Accurate Image Super-Resolution Using Very Deep Convolutional Networks](#about-accurate-image-super-resolution-using-very-deep-convolutional-networks)
-2. [Installation](#installation)
-    * [Clone and install requirements](#clone-and-install-requirements)
-    * [Download pretrained weights](#download-pretrained-weights)
-    * [Download dataset](#download-dataset)
-3. [Test](#test)
-4. [Train](#train-eg-voc2012)
-    * [Example](#example-eg-voc2012)
-5. [Contributing](#contributing) 
-6. [Credit](#credit)
 
-### About Accurate Image Super-Resolution Using Very Deep Convolutional Networks
+- [VDSR-PyTorch](#vdsr-pytorch)
+    - [Overview](#overview)
+    - [Table of contents](#table-of-contents)
+    - [About Accurate Image Super-Resolution Using Very Deep Convolutional Networks](#about-accelerating-the-super-resolution-convolutional-neural-network)
+    - [Download weights](#download-weights)
+    - [Download datasets](#download-datasets)
+        - [Download train dataset](#download-train-dataset)
+        - [Download valid dataset](#download-valid-dataset)
+    - [Test](#test)
+    - [Train](#train)
+    - [Result](#result)
+    - [Credit](#credit)
+        - [Accelerating the Super-Resolution Convolutional Neural Network](#accurate-image-super-resolution-using-very-deep-convolutional-networks)
+
+## About Accelerating the Super-Resolution Convolutional Neural Network
 
 If you're new to VDSR, here's an abstract straight from the paper:
 
-We present a highly accurate single-image superresolution (SR) method. 
-Our method uses a very deep convolutional network inspired by VGG-net used for ImageNet classification. 
-We find increasing our network depth shows a significant improvement in accuracy. 
-Our finalmodel uses 20 weight layers. By cascading small filters many times in a deep network structure, 
-contextual information over large image regions is exploited in an efficient way. 
-With very deep networks, however, convergence speed becomes a critical issue during training. 
-We propose a simple yet effective training procedure. We learn residuals onlyb and use extremely high learning rates 
-(104 times higher than SRCNN) enabled by adjustable gradient clipping.
-Our proposed method performs better than existing methods in accuracy and visual improvements in our results are
-easily noticeable.
+We present a highly accurate single-image superresolution (SR) method. Our method uses a very deep convolutional network inspired by VGG-net used for
+ImageNet classification. We find increasing our network depth shows a significant improvement in accuracy. Our finalmodel uses 20 weight layers. By
+cascading small filters many times in a deep network structure, contextual information over large image regions is exploited in an efficient way. With
+very deep networks, however, convergence speed becomes a critical issue during training. We propose a simple yet effective training procedure. We
+learn residuals onlyb and use extremely high learning rates
+(104 times higher than SRCNN) enabled by adjustable gradient clipping. Our proposed method performs better than existing methods in accuracy and
+visual improvements in our results are easily noticeable.
 
-### Installation
+## Download weights
 
-#### Clone and install requirements
+- [Google Driver](https://drive.google.com/drive/folders/1vrf4VdjuQXCmVo0uqs3kTlls-fPaRRpc?usp=sharing)
+- [Baidu Driver](https://pan.baidu.com/s/16HnByHXp0cW57RfpdwHahQ) access:`llot`
 
-```bash
-git clone https://github.com/Lornatang/VDSR-PyTorch.git
-cd VDSR-PyTorch/
-pip install -r requirements.txt
-```
+## Download datasets
 
-#### Download pretrained weights
+### Download train dataset
 
-```bash
-cd weights/
-bash download_weights.sh
-```
+#### TB291
 
-#### Download dataset
+- Image format
+    - [Google Driver](https://drive.google.com/drive/folders/13wiE6YqIhyix0RFxpFONJ7Zz_00CttdX?usp=sharing)
+    - [Baidu Driver](https://pan.baidu.com/s/1mhbFj0Nvwthmgx07Gas5BQ) access: `llot`
 
-```bash
-cd data/
-bash download_dataset.sh
-```
+- LMDB format (train)
+    - [Google Driver](https://drive.google.com/drive/folders/1BPqN08QHk_xFnMJWMS8grfh_vesVs8Jf?usp=sharing)
+    - [Baidu Driver](https://pan.baidu.com/s/1eqeORnKcTmGatx2kAG92-A) access: `llot`
 
-### Test
+- LMDB format (valid)
+    - [Google Driver](https://drive.google.com/drive/folders/1bYqqKk6NJ9wUfxTH2t_LbdMTB04OUicc?usp=sharing)
+    - [Baidu Driver](https://pan.baidu.com/s/1W34MeEtLY0m-bOrnaveVmw) access: `llot`
 
-Evaluate the overall performance of the network.
-```bash
-usage: test.py [-h] [--dataroot DATAROOT] [--scale-factor {2,3,4}]
-               [--weights WEIGHTS] [--cuda]
+### Download valid dataset
 
-Accurate Image Super-Resolution Using Very Deep Convolutional Networks
+#### Set5
 
-optional arguments:
-  -h, --help            show this help message and exit
-  --dataroot DATAROOT   The directory address where the image needs to be
-                        processed. (default: `./data/Set5`).
-  --scale-factor {2,3,4}
-                        Image scaling ratio. (default: 4).
-  --weights WEIGHTS     Generator model name. (default:`weights/vdsr_4x.pth`)
-  --cuda                Enables cuda
+- Image format
+    - [Google Driver](https://drive.google.com/file/d/1GtQuoEN78q3AIP8vkh-17X90thYp_FfU/view?usp=sharing)
+    - [Baidu Driver](https://pan.baidu.com/s/1dlPcpwRPUBOnxlfW5--S5g) access:`llot`
 
-# Example
-python test.py --dataroot ./data/Set5 --scale-factor 4 --weights ./weights/vdsr_4x.pth --cuda
-```
+#### Set14
 
-Evaluate the benchmark of validation data set in the network
-```bash
-usage: test_benchmark.py [-h] [--dataroot DATAROOT] [-j N]
-                         [--image-size IMAGE_SIZE] --scale-factor {2,3,4}
-                         --weights WEIGHTS [--cuda]
+- Image format
+    - [Google Driver](https://drive.google.com/file/d/1CzwwAtLSW9sog3acXj8s7Hg3S7kr2HiZ/view?usp=sharing)
+    - [Baidu Driver](https://pan.baidu.com/s/1KBS38UAjM7bJ_e6a54eHaA) access:`llot`
 
-Accurate Image Super-Resolution Using Very Deep Convolutional Networks
+#### BSD200
 
-optional arguments:
-  -h, --help            show this help message and exit
-  --dataroot DATAROOT   Path to datasets. (default:`./data/VOC2012`)
-  -j N, --workers N     Number of data loading workers. (default:4)
-  --image-size IMAGE_SIZE
-                        Size of the data crop (squared assumed). (default:256)
-  --scale-factor {2,3,4}
-                        Low to high resolution scaling factor.
-  --weights WEIGHTS     Path to weights.
-  --cuda                Enables cuda
+- Image format
+    - [Google Driver](https://drive.google.com/file/d/1cdMYTPr77RdOgyAvJPMQqaJHWrD5ma5n/view?usp=sharing)
+    - [Baidu Driver](https://pan.baidu.com/s/1xahPw4dNNc3XspMMOuw1Bw) access:`llot`
 
-# Example
-python test_benchmark.py --dataroot ./data/VOC2012 --scale-factor 4 --weights ./weights/vdsr_4x.pth --cuda
-```
+## Test
 
-Test single picture
-```bash
-usage: test_image.py [-h] [--file FILE] [--scale-factor {2,3,4}]
-                     [--weights WEIGHTS] [--cuda]
+Modify the contents of the file as follows.
 
-Accurate Image Super-Resolution Using Very Deep Convolutional Networks
+- line 24: `upscale_factor` change to the magnification you need to enlarge.
+- line 25: `mode` change Set to valid mode.
+- line 84: `model_path` change weight address after training.
 
-optional arguments:
-  -h, --help            show this help message and exit
-  --file FILE           Test low resolution image name.
-                        (default:`./assets/baby.png`)
-  --scale-factor {2,3,4}
-                        Super resolution upscale factor. (default:4)
-  --weights WEIGHTS     Generator model name. (default:`weights/vdsr_4x.pth`)
-  --cuda                Enables cuda
+## Train
 
-# Example
-python test_image.py --file ./assets/baby.png --scale-factor 4 ---weights ./weights/vdsr_4x.pth -cuda
-```
+Modify the contents of the file as follows.
 
-Test single video
-```bash
-usage: test_video.py [-h] --file FILE --scale-factor {2,3,4} --weights WEIGHTS
-                     [--view] [--cuda]
+- line 24: `upscale_factor` change to the magnification you need to enlarge.
+- line 25: `mode` change Set to train mode.
 
-Accurate Image Super-Resolution Using Very Deep Convolutional Networks
+If you want to load weights that you've trained before, modify the contents of the file as follows.
 
-optional arguments:
-  -h, --help            show this help message and exit
-  --file FILE           Test low resolution video name.
-  --scale-factor {2,3,4}
-                        Super resolution upscale factor. (default:4)
-  --weights WEIGHTS     Generator model name.
-  --view                Super resolution real time to show.
-  --cuda                Enables cuda
+- line 56: `resume` change to `True`.
+- line 57: `strict` Transfer learning is set to `False`, incremental learning is set to `True`.
+- line 58: `start_epoch` change number of training iterations in the previous round.
+- line 59: `resume_weight` the weight address that needs to be loaded.
 
-# Example
-python test_video.py --file ./data/1.mp4 --scale-factor 4 --weights ./weights/vdsr_4x.pth --view --cuda
-```
+## Result
 
-Low resolution / Recovered High Resolution / Ground Truth
+Source of original paper results: https://arxiv.org/pdf/1511.04587.pdf
 
-<span align="center"><img src="assets/result.png" alt="">
-</span>
+In the following table, the value in `()` indicates the result of the project, and `-` indicates no test.
 
-### Train (e.g VOC2012)
+| Dataset | Scale |       PSNR       |
+| :-----: | :---: | :--------------: |
+|  Set5   |   2   | 37.53(**37.44**) |
+|  Set5   |   3   | 33.66(**33.69**) |
+|  Set5   |   4   | 31.35(**31.28**) |
 
-```bash
-usage: train.py [-h] [--dataroot DATAROOT] [-j N] [--epochs N]
-                [--image-size IMAGE_SIZE] [-b N] [--lr LR]
-                [--momentum MOMENTUM] [--weight-decay WEIGHT_DECAY]
-                [--clip CLIP] [--scale-factor {2,3,4}] [--weights WEIGHTS]
-                [-p N] [--manualSeed MANUALSEED] [--cuda]
-
-Accurate Image Super-Resolution Using Very Deep Convolutional Networks
-
-optional arguments:
-  -h, --help            show this help message and exit
-  --dataroot DATAROOT   Path to datasets. (default:`./data/VOC2012`)
-  -j N, --workers N     Number of data loading workers. (default:4)
-  --epochs N            Number of total epochs to run. (default:100)
-  --image-size IMAGE_SIZE
-                        Size of the data crop (squared assumed). (default:256)
-  -b N, --batch-size N  mini-batch size (default: 16), this is the total
-                        batch size of all GPUs on the current node when using
-                        Data Parallel or Distributed Data Parallel.
-  --lr LR               Learning rate. (default:0.1)
-  --momentum MOMENTUM   Momentum, (default:0.9)
-  --weight-decay WEIGHT_DECAY
-                        Weight decay. (default:0.0001).
-  --clip CLIP           Clipping Gradients. (default:0.4).
-  --scale-factor {2,3,4}
-                        Low to high resolution scaling factor. (default:4).
-  --weights WEIGHTS     Path to weights (to continue training).
-  -p N, --print-freq N  Print frequency. (default:5)
-  --manualSeed MANUALSEED
-                        Seed for initializing training. (default:0)
-  --cuda                Enables cuda
-```
-
-#### Example (e.g VOC2012)
-
-```bash
-python train.py --dataroot ./data/VOC2012 --scale-factor 4 --cuda
-```
-
-If you want to load weights that you've trained before, run the following command.
-
-```bash
-python train.py --dataroot ./data/VOC2012 --scale-factor 4 --weights ./weights/vdsr_4x_epoch_100.pth --cuda
-```
-
-### Contributing
-
-If you find a bug, create a GitHub issue, or even better, submit a pull request. Similarly, if you have questions, simply post them as GitHub issues.   
-
-I look forward to seeing what the community does with these models! 
+Low Resolution / Super Resolution / High Resolution
+<span align="center"><img src="assets/result.png"/></span>
 
 ### Credit
 
 #### Accurate Image Super-Resolution Using Very Deep Convolutional Networks
+
 _Jiwon Kim, Jung Kwon Lee, Kyoung Mu Lee_ <br>
 
 **Abstract** <br>
-We present a highly accurate single-image superresolution (SR) method. 
-Our method uses a very deep convolutional network inspired by VGG-net used for ImageNet classification. 
-We find increasing our network depth shows a significant improvement in accuracy. 
-Our finalmodel uses 20 weight layers. By cascading small filters many times in a deep network structure, 
-contextual information over large image regions is exploited in an efficient way. 
-With very deep networks, however, convergence speed becomes a critical issue during training. 
-We propose a simple yet effective training procedure. We learn residuals onlyb and use extremely high learning rates 
-(104 times higher than SRCNN) enabled by adjustable gradient clipping.
-Our proposed method performs better than existing methods in accuracy and visual improvements in our results are
-easily noticeable.
+We present a highly accurate single-image superresolution (SR) method. Our method uses a very deep convolutional network inspired by VGG-net used for
+ImageNet classification. We find increasing our network depth shows a significant improvement in accuracy. Our finalmodel uses 20 weight layers. By
+cascading small filters many times in a deep network structure, contextual information over large image regions is exploited in an efficient way. With
+very deep networks, however, convergence speed becomes a critical issue during training. We propose a simple yet effective training procedure. We
+learn residuals onlyb and use extremely high learning rates
+(104 times higher than SRCNN) enabled by adjustable gradient clipping. Our proposed method performs better than existing methods in accuracy and
+visual improvements in our results are easily noticeable.
 
 [[Paper]](https://arxiv.org/pdf/1511.04587)
 
