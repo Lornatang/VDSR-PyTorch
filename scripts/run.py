@@ -1,14 +1,8 @@
 import os
 
 # Prepare dataset
-os.system("python3 ./prepare_dataset.py --inputs_dir ../data/TB291/original --output_dir ../data/TB291/VDSR/")
+os.system("python ./create_multiscale_dataset.py --images_dir ../data/TB291/original --output_dir ../data/TB291/VDSR/original")
+os.system("python ./prepare_dataset.py --images_dir ../data/TB291/VDSR/original --output_dir ../data/TB291/VDSR/train --image_size 64 --step 64 --num_workers 10")
 
 # Split train and valid
-os.system("python3 ./split_train_valid_dataset.py --inputs_dir ../data/TB291/VDSR")
-
-# Create LMDB database file
-os.system("python3 ./create_lmdb_dataset.py --image_dir ../data/TB291/VDSR/train/inputs --lmdb_path ../data/train_lmdb/VDSR/TB291_LR_lmdb")
-os.system("python3 ./create_lmdb_dataset.py --image_dir ../data/TB291/VDSR/train/target --lmdb_path ../data/train_lmdb/VDSR/TB291_HR_lmdb")
-
-os.system("python3 ./create_lmdb_dataset.py --image_dir ../data/TB291/VDSR/valid/inputs --lmdb_path ../data/valid_lmdb/VDSR/TB291_LR_lmdb")
-os.system("python3 ./create_lmdb_dataset.py --image_dir ../data/TB291/VDSR/valid/target --lmdb_path ../data/valid_lmdb/VDSR/TB291_HR_lmdb")
+os.system("python ./split_train_valid_dataset.py --train_images_dir ../data/TB291/VDSR/train --valid_images_dir ../data/TB291/VDSR/valid --valid_samples_ratio 0.1")

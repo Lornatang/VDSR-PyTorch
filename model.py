@@ -62,6 +62,7 @@ class VDSR(nn.Module):
         out = self.conv1(x)
         out = self.trunk(out)
         out = self.conv2(out)
+
         out = torch.add(out, identity)
 
         return out

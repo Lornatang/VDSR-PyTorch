@@ -34,8 +34,8 @@ visual improvements in our results are easily noticeable.
 
 ## Download weights
 
-- [Google Driver](https://drive.google.com/drive/folders/1vrf4VdjuQXCmVo0uqs3kTlls-fPaRRpc?usp=sharing)
-- [Baidu Driver](https://pan.baidu.com/s/16HnByHXp0cW57RfpdwHahQ) access:`llot`
+- [Google Driver](https://drive.google.com/drive/folders/1WZN2bO7SN7bkcQH65VYznQR90LDhiNBd?usp=sharing)
+- [Baidu Driver](https://pan.baidu.com/s/1yNs4rqIb004-NKEdKBJtYg?pwd=llot)
 
 ## Download datasets
 
@@ -44,16 +44,7 @@ visual improvements in our results are easily noticeable.
 #### TB291
 
 - Image format
-    - [Google Driver](https://drive.google.com/drive/folders/13wiE6YqIhyix0RFxpFONJ7Zz_00CttdX?usp=sharing)
     - [Baidu Driver](https://pan.baidu.com/s/1mhbFj0Nvwthmgx07Gas5BQ) access: `llot`
-
-- LMDB format (train)
-    - [Google Driver](https://drive.google.com/drive/folders/1BPqN08QHk_xFnMJWMS8grfh_vesVs8Jf?usp=sharing)
-    - [Baidu Driver](https://pan.baidu.com/s/1eqeORnKcTmGatx2kAG92-A) access: `llot`
-
-- LMDB format (valid)
-    - [Google Driver](https://drive.google.com/drive/folders/1bYqqKk6NJ9wUfxTH2t_LbdMTB04OUicc?usp=sharing)
-    - [Baidu Driver](https://pan.baidu.com/s/1W34MeEtLY0m-bOrnaveVmw) access: `llot`
 
 ### Download valid dataset
 
@@ -79,23 +70,23 @@ visual improvements in our results are easily noticeable.
 
 Modify the contents of the file as follows.
 
-- line 24: `upscale_factor` change to the magnification you need to enlarge.
-- line 25: `mode` change Set to valid mode.
-- line 84: `model_path` change weight address after training.
+- line 28: `upscale_factor` change to the magnification you need to enlarge.
+- line 30: `mode` change Set to valid mode.
+- line 76: `model_path` change weight address after training.
 
 ## Train
 
 Modify the contents of the file as follows.
 
-- line 24: `upscale_factor` change to the magnification you need to enlarge.
-- line 25: `mode` change Set to train mode.
+- line 28: `upscale_factor` change to the magnification you need to enlarge.
+- line 30: `mode` change Set to train mode.
 
 If you want to load weights that you've trained before, modify the contents of the file as follows.
 
-- line 56: `resume` change to `True`.
-- line 57: `strict` Transfer learning is set to `False`, incremental learning is set to `True`.
-- line 58: `start_epoch` change number of training iterations in the previous round.
-- line 59: `resume_weight` the weight address that needs to be loaded.
+- line 47: `resume` change to `True`.
+- line 48: `strict` Transfer learning is set to `False`, incremental learning is set to `True`.
+- line 49: `start_epoch` change number of training iterations in the previous round.
+- line 50: `resume_weight` the weight address that needs to be loaded.
 
 ## Result
 
@@ -104,10 +95,10 @@ Source of original paper results: https://arxiv.org/pdf/1511.04587.pdf
 In the following table, the value in `()` indicates the result of the project, and `-` indicates no test.
 
 | Dataset | Scale |       PSNR       |
-| :-----: | :---: | :--------------: |
-|  Set5   |   2   | 37.53(**37.44**) |
-|  Set5   |   3   | 33.66(**33.69**) |
-|  Set5   |   4   | 31.35(**31.28**) |
+|:-------:|:-----:|:----------------:|
+|  Set5   |   2   | 37.10(**37.44**) |
+|  Set5   |   3   | 32.89(**33.69**) |
+|  Set5   |   4   | 30.84(**31.28**) |
 
 Low Resolution / Super Resolution / High Resolution
 <span align="center"><img src="assets/result.png"/></span>

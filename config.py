@@ -18,26 +18,26 @@ from torch.backends import cudnn as cudnn
 # ==============================================================================
 # General configuration
 # ==============================================================================
+# Random seed to maintain reproducible results
 torch.manual_seed(0)
+# Use GPU for training by default
 device = torch.device("cuda", 0)
+# Turning on when the image size does not change during training can speed up training
 cudnn.benchmark = True
+# Image magnification factor
 upscale_factor = 2
+# Current configuration parameter method
 mode = "train"
-exp_name = "baseline"
+# Experiment name, easy to save weights and log files
+exp_name = "vdsr_x2"
 
 # ==============================================================================
 # Training configuration
 # ==============================================================================
 if mode == "train":
     # Dataset
-    # Image format
     train_image_dir = "data/TB291/VDSR/train"
     valid_image_dir = "data/TB291/VDSR/valid"
-    # LMDB format
-    train_lr_lmdb_path = "data/train_lmdb/VDSR/TB291_LR_lmdb"
-    train_hr_lmdb_path = "data/train_lmdb/VDSR/TB291_HR_lmdb"
-    valid_lr_lmdb_path = "data/valid_lmdb/VDSR/TB291_LR_lmdb"
-    valid_hr_lmdb_path = "data/valid_lmdb/VDSR/TB291_HR_lmdb"
 
     image_size = 41
     batch_size = 64
@@ -52,26 +52,18 @@ if mode == "train":
     # Total num epochs
     epochs = 80
 
-    # SGD optimizer parameter (less training and low PSNR)
-    model_optimizer_name = "sgd"
-    model_lr = 1e-1
+    # SGD optimizer parameter
+    model_lr = 0.1
     model_momentum = 0.9
     model_weight_decay = 1e-4
     model_nesterov = False
     model_clip_gradient = 1.0
 
-    # Adam optimizer parameter (faster training and better PSNR)
-    # model_optimizer_name = "adam"
-    # model_lr = 1e-2
-    # model_betas = (0.9, 0.999)
-    # model_clip_gradient = 1.0
-
     # Optimizer scheduler parameter
-    lr_scheduler_name = "StepLR"
-    lr_scheduler_step_size = 20
+    lr_scheduler_step_size = epochs // 4
     lr_scheduler_gamma = 0.1
 
-    print_frequency = 100
+    print_frequency = 500
 
 # ==============================================================================
 # Verify configuration
