@@ -13,7 +13,7 @@
 # ==============================================================================
 """Realize the parameter configuration function of dataset, model, training and verification code."""
 import torch
-from torch.backends import cudnn as cudnn
+from torch.backends import cudnn
 
 # ==============================================================================
 # General configuration
