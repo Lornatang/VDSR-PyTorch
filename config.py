@@ -51,7 +51,7 @@ if mode == "train":
     model_momentum = 0.9
     model_weight_decay = 1e-4
     model_nesterov = False
-    model_clip_gradient = 1.0
+    model_clip_gradient = 0.01
 
     # Optimizer scheduler parameter
     lr_scheduler_step_size = epochs // 4

@@ -183,7 +183,7 @@ def train(model, train_dataloader, psnr_criterion, pixel_criterion, optimizer, e
         # Gradient zoom + gradient clipping
         scaler.scale(loss).backward()
         scaler.unscale_(optimizer)
-        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=config.model_clip_gradient, norm_type=2.0)
+        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=config.model_clip_gradient / optimizer.param_groups[0]["lr"], norm_type=2.0)
         # Update generator weight
         scaler.step(optimizer)
         scaler.update()
