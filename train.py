@@ -117,7 +117,7 @@ def build_model() -> nn.Module:
 
 def define_loss() -> [nn.MSELoss, nn.MSELoss]:
     psnr_criterion = nn.MSELoss().to(config.device)
-    pixel_criterion = nn.MSELoss().to(config.device)
+    pixel_criterion = nn.MSELoss(reduction="sum").to(config.device)
 
     return psnr_criterion, pixel_criterion
 
