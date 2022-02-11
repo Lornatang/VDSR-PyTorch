@@ -96,9 +96,9 @@ In the following table, the value in `()` indicates the result of the project, a
 
 | Dataset | Scale |       PSNR       |
 |:-------:|:-----:|:----------------:|
-|  Set5   |   2   | 37.10(**37.44**) |
-|  Set5   |   3   | 32.89(**33.69**) |
-|  Set5   |   4   | 30.84(**31.28**) |
+|  Set5   |   2   | 37.53(**37.50**) |
+|  Set5   |   3   | 33.66(**33.69**) |
+|  Set5   |   4   | 31.35(**31.08**) |
 
 Low Resolution / Super Resolution / High Resolution
 <span align="center"><img src="assets/result.png"/></span>

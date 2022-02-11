@@ -15,9 +15,6 @@
 import torch
 from torch.backends import cudnn
 
-# ==============================================================================
-# General configuration
-# ==============================================================================
 # Random seed to maintain reproducible results
 torch.manual_seed(0)
 # Use GPU for training by default
@@ -31,9 +28,6 @@ mode = "train"
 # Experiment name, easy to save weights and log files
 exp_name = "vdsr_x2"
 
-# ==============================================================================
-# Training configuration
-# ==============================================================================
 if mode == "train":
     # Dataset
     train_image_dir = "data/TB291/VDSR/train"
@@ -65,9 +59,6 @@ if mode == "train":
 
     print_frequency = 500
 
-# ==============================================================================
-# Verify configuration
-# ==============================================================================
 if mode == "valid":
     # Test data address
     sr_dir = f"results/test/{exp_name}"

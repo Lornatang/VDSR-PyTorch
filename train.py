@@ -143,11 +143,12 @@ def resume_checkpoint(model) -> None:
         if config.resume_weight != "":
             # Get pretrained model state dict
             pretrained_state_dict = torch.load(config.resume_weight)
+            model_state_dict = model.state_dict()
             # Extract the fitted model weights
-            new_state_dict = {k: v for k, v in pretrained_state_dict.items() if k in model.state_dict().items()}
+            new_state_dict = {k: v for k, v in pretrained_state_dict.items() if k in model_state_dict.items()}
             # Overwrite the pretrained model weights to the current model
-            model.state_dict().update(new_state_dict)
-            model.load_state_dict(model.state_dict(), strict=config.strict)
+            model_state_dict.update(new_state_dict)
+            model.load_state_dict(model_state_dict, strict=config.strict)
 
 
 def train(model, train_dataloader, psnr_criterion, pixel_criterion, optimizer, epoch, scaler, writer) -> None:
