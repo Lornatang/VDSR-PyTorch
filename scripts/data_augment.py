@@ -17,8 +17,9 @@ import shutil
 
 from multiprocessing import Pool
 
-from PIL import Image
 from tqdm import tqdm
+import cv2
+import data_utils
 
 
 def main(args) -> None:
@@ -40,19 +41,21 @@ def main(args) -> None:
 
 
 def worker(image_file_name, args) -> None:
-    image = Image.open(f"{args.images_dir}/{image_file_name}").convert("RGB")
+    # image = Image.open(f"{args.images_dir}/{image_file_name}").convert("RGB")
+    image = cv2.imread(f"{args.images_dir}/{image_file_name}")
 
     index = 1
     # Data augment
-    for scale_ratio in [1.0, 0.9, 0.8, 0.7, 0.6]:
-        for rotate_angle in [0, 90, 180, 270]:
-            for flip_probability in [0, 1]:
-                index += 1
-                new_image = image.resize((int(image.width * scale_ratio), int(image.height * scale_ratio)), resample=Image.BICUBIC)
-                new_image = new_image.rotate(rotate_angle)
-                new_image = new_image.transpose(Image.FLIP_LEFT_RIGHT) if flip_probability == 1 else new_image
-                # Save all images
-                new_image.save(f"{args.output_dir}/{image_file_name.split('.')[-2]}_{index:04d}.{image_file_name.split('.')[-1]}")
+    for rotate_angle in [0, 90, 180, 270]:
+        for flip_way in [-2, 0, 1]:
+            # Rotate
+            new_image = data_utils.rotate(image, rotate_angle)
+            # Flip
+            new_image = cv2.flip(new_image, flip_way) if flip_way != -2 else new_image
+            # Save all images
+            cv2.imwrite(f"{args.output_dir}/{image_file_name.split('.')[-2]}_{index:04d}.{image_file_name.split('.')[-1]}", new_image)
+
+            index += 1
 
 
 if __name__ == "__main__":
