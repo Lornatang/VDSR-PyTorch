@@ -35,7 +35,7 @@ def main(args) -> None:
     image_file_names = os.listdir(args.images_dir)
 
     # Splitting images with multiple threads
-    progress_bar = tqdm(total=len(image_file_names), unit="image", desc="Split")
+    progress_bar = tqdm(total=len(image_file_names), unit="image", desc="Prepare split image")
     workers_pool = multiprocessing.Pool(args.num_workers)
     for image_file_name in image_file_names:
         workers_pool.apply_async(worker, args=(image_file_name, args), callback=lambda arg: progress_bar.update(1))
@@ -57,7 +57,7 @@ def worker(image_file_name, args) -> None:
                 hr_image = image[pos_y: pos_y + args.image_size, pos_x:pos_x + args.image_size, ...]
                 hr_image = np.ascontiguousarray(hr_image)
                 # Resize lr image
-                lr_image = data_utils.imresize(hr_image, 1/args.scale)
+                lr_image = data_utils.imresize(hr_image, 1 / args.scale)
                 lr_image = data_utils.imresize(lr_image, args.scale)
                 # Save image
                 cv2.imwrite(f"{args.output_dir}/hr/{image_file_name.split('.')[-2]}_x{args.scale}_{index:04d}.{image_file_name.split('.')[-1]}",

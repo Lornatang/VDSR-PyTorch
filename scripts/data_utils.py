@@ -194,28 +194,3 @@ def imresize(image: Any, scale_factor: float, antialiasing: bool = True) -> Any:
             out_2 = out_2.transpose(1, 2, 0)
 
     return out_2
-
-
-def rotate(image: np.ndarray, angle: int, center=None, scale_factor: float = 1.0) -> np.ndarray:
-    """Rotate an image randomly by a specified angle.
-
-    Args:
-        image (np.ndarray): The input image for `OpenCV.imread`.
-        angle (int): Rotation angle.
-        center (tuple[int]): Image rotation center. If the center is None, initialize it as the center of the image. ``Default: None``.
-        scale_factor (float): scaling factor. Default: 1.0.
-
-    Returns:
-        np.ndarray: Rotated image.
-    """
-
-    image_height, image_width = image.shape[:2]
-
-    if center is None:
-        center = (image_width // 2, image_height // 2)
-
-    # Random select specific angle
-    matrix = cv2.getRotationMatrix2D(center, angle, scale_factor)
-    image = cv2.warpAffine(image, matrix, (image_width, image_height))
-
-    return image
