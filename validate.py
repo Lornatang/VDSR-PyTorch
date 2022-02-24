@@ -30,7 +30,6 @@ def main() -> None:
     print("Build VDSR model successfully.")
 
     # Load the super-resolution model weights
-    print(f"Load VDSR model weights `{os.path.abspath(config.model_path)}`...")
     checkpoint = torch.load(config.model_path, map_location=lambda storage, loc: storage)
     model.load_state_dict(checkpoint["state_dict"])
     print(f"Load VDSR model weights `{os.path.abspath(config.model_path)}` successfully.")
