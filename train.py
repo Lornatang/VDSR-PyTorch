@@ -65,7 +65,7 @@ def main():
         # Load the optimizer model
         optimizer.load_state_dict(checkpoint["optimizer"])
         # Load the scheduler model
-        # scheduler.load_state_dict(checkpoint["scheduler"])
+        scheduler.load_state_dict(checkpoint["scheduler"])
         print("Loaded pretrained model weights.")
 
     # Create a folder of super-resolution experiment results
